@@ -48,10 +48,10 @@ def send_embed(title, desc, color):
         "description": desc,
         "color": color,
         "fields": [
-            {"name": "📁 Directory", "value": cwd,              "inline": False},
+            {"name": "📁 Directory", "value": cwd,               "inline": False},
             {"name": "🔑 Session",   "value": session_id + "...", "inline": True},
         ],
-        "footer": {"text": "Claude Code • Bug Bounty Session"},
+        "footer": {"text": "Claude Code • Bug Bounty"},
         "timestamp": timestamp
     }]})
 
@@ -72,7 +72,8 @@ def get_last_assistant_message():
             if entry.get("type") == "assistant":
                 content = entry.get("message", {}).get("content", "")
                 if isinstance(content, list):
-                    parts = [b.get("text", "") for b in content if isinstance(b, dict) and b.get("type") == "text"]
+                    parts = [b.get("text", "") for b in content
+                             if isinstance(b, dict) and b.get("type") == "text"]
                     text = "\n".join(parts).strip()
                 elif isinstance(content, str):
                     text = content.strip()
@@ -88,12 +89,12 @@ if hook_event == "Stop":
     last = get_last_assistant_message()
     if last:
         send_chunks(last)
-    send_embed("✅ Claude Code — Task Complete", "Claude finished and is waiting for your next input.", 2664261)
+    send_embed("✅ Claude finished", "Waiting for your next input.", 2664261)
 
 elif hook_event == "Notification":
     if notif_type == "permission_prompt":
-        send_embed("🔐 Claude Needs Permission", "Claude is waiting for your approval to proceed.", 16761095)
+        send_embed("🔐 Permission needed", "Claude is waiting for your approval.", 16761095)
     elif notif_type == "idle_prompt":
-        send_embed("💤 Claude is Idle", "Claude is idle and waiting for your next instruction.", 16750592)
+        send_embed("💤 Claude is idle", "Waiting for your next instruction.", 16750592)
     else:
-        send_embed("🔔 Claude Notification", message, 32767)
+        send_embed("🔔 Notification", message, 32767)
