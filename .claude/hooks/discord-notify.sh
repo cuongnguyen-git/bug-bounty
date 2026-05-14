@@ -1,9 +1,8 @@
 #!/bin/bash
-# Reads DISCORD_WEBHOOK_URL from environment (set in ~/.bounty-env)
-# Never hardcode the webhook here — it lives in ~/.bounty-env which is gitignored
+# Reads DISCORD_WEBHOOK_URL from environment (sourced from ~/.bounty-env)
 
 if [[ -z "$DISCORD_WEBHOOK_URL" ]]; then
-    echo "[discord-notify] DISCORD_WEBHOOK_URL not set — skipping notification" >&2
+    echo "[discord-notify] DISCORD_WEBHOOK_URL not set — skipping" >&2
     exit 0
 fi
 
