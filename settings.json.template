@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "WORKDIR_PLACEHOLDER/.claude/hooks/discord-notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "WORKDIR_PLACEHOLDER/.claude/hooks/discord-notify.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+# ── Secrets — NEVER commit these ─────────────────────────────────────────────
+.bounty-env
+.env
+*.env
+secrets/
+*secret*
+*api_key*
+
+# ── Generated settings (contain paths/webhooks injected at install time) ──────
+.claude/settings.json
+
+# ── Recon output — too large and target-specific for git ──────────────────────
+output/
+results/
+*.txt
+*.json
+!package.json
+*.csv
+*.xml
+
+# ── OS / editor junk ──────────────────────────────────────────────────────────
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+__pycache__/
+*.pyc
