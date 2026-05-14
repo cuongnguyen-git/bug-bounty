@@ -1,0 +1,21 @@
+# Secrets
+.bounty-env
+.env
+*.env
+
+# Generated at install time (contains absolute paths)
+.claude/settings.json
+
+# Recon output
+output/
+results/
+*.csv
+*.xml
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+__pycache__/
+*.pyc
