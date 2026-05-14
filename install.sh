@@ -31,14 +31,8 @@ if [[ -f "$ENV_FILE" ]]; then
     warn ".bounty-env already exists — skipping secret prompts. Edit $ENV_FILE to update."
     source "$ENV_FILE"
 else
-    # Anthropic API key (used by Claude Code in headless/API mode)
+    # Discord webhook (only secret needed — Claude Max uses OAuth, not API key)
     echo ""
-    echo -e "${YELLOW}Paste your Anthropic API key (starts with sk-ant-):${NC}"
-    read -r -s ANTHROPIC_API_KEY
-    echo ""
-    [[ -z "$ANTHROPIC_API_KEY" ]] && error "API key cannot be empty"
-
-    # Discord webhook
     echo -e "${YELLOW}Paste your Discord webhook URL:${NC}"
     read -r DISCORD_WEBHOOK_URL
     echo ""
@@ -46,7 +40,6 @@ else
 
     cat > "$ENV_FILE" <<EOF
 # Bug bounty environment — DO NOT COMMIT THIS FILE
-export ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY"
 export DISCORD_WEBHOOK_URL="$DISCORD_WEBHOOK_URL"
 EOF
     chmod 600 "$ENV_FILE"
@@ -202,16 +195,25 @@ info "Updating nuclei templates..."
 nuclei -update-templates -silent 2>/dev/null || true
 success "Nuclei templates updated"
 
-# ── 10. Verify Claude Code auth ───────────────────────────────────────────────
-info "Verifying Claude Code API auth..."
-if claude --version &>/dev/null; then
-    success "Claude Code is operational"
-    echo ""
-    echo -e "${YELLOW}Note: Claude Code will use ANTHROPIC_API_KEY from your .bounty-env${NC}"
-    echo -e "${YELLOW}If it prompts for browser auth, run: export ANTHROPIC_API_KEY=\$ANTHROPIC_API_KEY${NC}"
-else
-    warn "Claude Code installed but could not verify — check ANTHROPIC_API_KEY"
-fi
+# ── 10. Claude Code auth (Claude Max / headless OAuth) ────────────────────────
+info "Setting up Claude Code authentication..."
+echo ""
+echo -e "${CYAN}┌─────────────────────────────────────────────────────────┐${NC}"
+echo -e "${CYAN}│          Claude Max — Headless Login Instructions        │${NC}"
+echo -e "${CYAN}└─────────────────────────────────────────────────────────┘${NC}"
+echo ""
+echo -e "  Claude Code needs to link to your Claude Max account."
+echo -e "  On a headless VPS it can't open a browser, so you do it manually:"
+echo ""
+echo -e "  ${YELLOW}1.${NC} After this installer finishes, run:  ${CYAN}claude${NC}"
+echo -e "  ${YELLOW}2.${NC} Claude Code will print a URL like:   ${CYAN}https://claude.ai/oauth/...${NC}"
+echo -e "  ${YELLOW}3.${NC} Open that URL in your ${YELLOW}local browser${NC} (Mac/phone — wherever you're logged in)"
+echo -e "  ${YELLOW}4.${NC} Approve the device link"
+echo -e "  ${YELLOW}5.${NC} The VPS terminal will confirm auth and drop you into Claude Code"
+echo ""
+echo -e "  This only needs to happen ${GREEN}once${NC}. The token is saved to ${CYAN}~/.claude/${NC}"
+echo -e "  and survives reboots. Re-imaging the VPS requires repeating this step."
+echo ""
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 echo ""
@@ -221,7 +223,8 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 echo -e "  Start hunting:  ${CYAN}~/launch-bounty.sh${NC}"
 echo -e "  Re-attach:      ${CYAN}tmux attach -t bounty${NC}"
-echo -e "  Secrets file:   ${CYAN}~/.bounty-env${NC}  (chmod 600, gitignored)"
+echo -e "  Auth Claude:    ${CYAN}claude${NC}  (first run — follow the URL printed)"
+echo -e "  Discord env:    ${CYAN}~/.bounty-env${NC}  (chmod 600, gitignored)"
 echo -e "  Project dir:    ${CYAN}$WORKDIR${NC}"
 echo -e "  Knowledge base: ${CYAN}$KNOWLEDGE_DIR${NC}"
 echo ""
