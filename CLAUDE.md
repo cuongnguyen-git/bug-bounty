@@ -5,24 +5,27 @@
 Make money from bug bounty. Not submissions. Not learning experiences. **Money.**
 
 This means: **only validated, demonstrable Critical severity findings get submitted.**  
-Hight, Medium, Low, and Informational findings are **never** submitted.  
+High, Medium, Low, and Informational findings are **never** submitted.  
 Findings with no working, reproducible PoC are never submitted. When in doubt — do not submit.
 
 ---
 
 ## Environment
 
-All commands run directly in **Ubuntu WSL** on the local machine. Do not use SSH.  
-Tools are installed locally in the Ubuntu WSL environment.  
+All commands run directly on this **Ubuntu VPS**. Tools are installed system-wide or under `~/go/bin/`.  
 Ensure `~/go/bin` is in PATH for Go-based recon tools. If it is not, prepend it:
 
 ```bash
 export PATH=$PATH:~/go/bin
 ```
 
+All work lives under `~/bugbounty/`. Do not write outside this directory.
+
+---
+
 ## Recon Tools
 
-Recon tools (gau, waybackurls, katana, etc.) are located at `~/go/bin/` in Ubuntu WSL.  
+Recon tools (gau, waybackurls, katana, etc.) are located at `~/go/bin/`.  
 Always verify a tool exists before running it. If a tool is missing, install it automatically:
 
 - **Go tools:** `go install github.com/<tool>@latest`
@@ -129,7 +132,7 @@ EOF
 - Authorized, ethical security testing only
 - Always stay in scope — do not test assets outside the defined program scope
 - No destructive actions — do not modify, delete, or corrupt data on target systems
-- All notes, leads, findings, and reports MUST be written to the Ubuntu WSL filesystem (`~/bugbounty/`). Never write to the Windows filesystem (`/mnt/c/`)
+- All notes, leads, findings, and reports MUST be written to `~/bugbounty/`
 - Out-of-scope subdomains: passive recon only — no active testing or payloads
 
 ---
@@ -153,13 +156,13 @@ When documenting a finding, always include the exact full URL, HTTP method, head
 - If I say I'm stepping away or going to bed, do not ask for input — keep hacking.
 - Take thorough notes so you can resume cleanly after context resets.
 - Before starting any session, read the knowledge base.
-- Combine with the Hunting Mindset above: relentless persistence until a Critical or High is found.
+- Combine with the Hunting Mindset above: relentless persistence until a Critical is found.
 
 ---
 
 ## Validation Standard (Critical Only)
 
-- Do not mark something as a Finding unless it clearly qualifies as Critical or High and you have a full end-to-end proof of concept.
+- Do not mark something as a Finding unless it clearly qualifies as Critical and you have a full end-to-end proof of concept.
 - Be extremely strict on impact. Overstating is not allowed.
 - **PoC or GTFO.**
 - If it's not clearly Critical → $0. Do not submit.
